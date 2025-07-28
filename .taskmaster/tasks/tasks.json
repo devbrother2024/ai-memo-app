@@ -1,0 +1,393 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "프로젝트 초기화 및 기본 설정",
+        "description": "Next.js 14 프로젝트를 초기화하고 TypeScript, Tailwind CSS, 기본 폴더 구조를 설정합니다.",
+        "details": "1. `npx create-next-app@latest memora --typescript --tailwind --app` 명령어로 Next.js 14 App Router 프로젝트 생성\n2. 필요한 기본 패키지 설치: `npm install zustand @headlessui/react lucide-react`\n3. 프로젝트 폴더 구조 설정:\n   - `/app`: 페이지 및 라우팅\n   - `/components`: 재사용 가능한 UI 컴포넌트\n   - `/lib`: 유틸리티 함수 및 헬퍼\n   - `/hooks`: 커스텀 훅\n   - `/types`: TypeScript 타입 정의\n   - `/styles`: 글로벌 스타일\n4. ESLint 및 Prettier 설정\n5. 기본 레이아웃 컴포넌트 생성\n6. 환경 변수 설정 (.env.local, .env.example)",
+        "testStrategy": "1. 프로젝트 빌드 및 개발 서버 실행 테스트\n2. TypeScript 타입 체크 검증\n3. ESLint 및 Prettier 규칙 준수 확인\n4. 기본 페이지 렌더링 테스트",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "데이터베이스 설계 및 ORM 설정",
+        "description": "Supabase 데이터베이스 스키마를 설계하고 DrizzleORM을 설정합니다.",
+        "status": "pending",
+        "dependencies": [
+          1
+        ],
+        "priority": "high",
+        "details": "1. Supabase 프로젝트 생성 및 설정\n   - Supabase 계정 생성 및 새 프로젝트 생성\n   - 데이터베이스 URL 및 API 키 확인\n   - 환경 변수 설정 (.env.local)\n2. DrizzleORM 설치 및 설정:\n   - `npm install drizzle-orm @supabase/supabase-js`\n   - `npm install -D drizzle-kit`\n3. 데이터베이스 스키마 설계 (lib/db/schema.ts):\n```typescript\nimport { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';\n\nexport const users = pgTable('users', {\n  id: uuid('id').primaryKey().defaultRandom(),\n  email: text('email').unique().notNull(),\n  name: text('name'),\n  createdAt: timestamp('created_at').defaultNow(),\n  updatedAt: timestamp('updated_at').defaultNow()\n});\n\nexport const memos = pgTable('memos', {\n  id: uuid('id').primaryKey().defaultRandom(),\n  title: text('title'),\n  content: text('content').notNull(),\n  summary: text('summary'),\n  categoryId: uuid('category_id').references(() => categories.id),\n  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),\n  createdAt: timestamp('created_at').defaultNow(),\n  updatedAt: timestamp('updated_at').defaultNow()\n});\n\nexport const categories = pgTable('categories', {\n  id: uuid('id').primaryKey().defaultRandom(),\n  name: text('name').notNull(),\n  color: text('color').default('#000000')\n});\n```\n4. Drizzle 설정 파일 생성 (drizzle.config.ts)\n5. 데이터베이스 클라이언트 설정 (lib/db/index.ts)\n6. 마이그레이션 실행: `npx drizzle-kit push:pg`",
+        "testStrategy": "1. Supabase 데이터베이스 연결 테스트\n2. DrizzleORM 스키마 검증\n3. 마이그레이션 성공 여부 확인\n4. 기본 CRUD 작업 테스트\n5. 관계 설정 및 외래 키 제약 조건 검증\n6. Supabase Auth와의 통합 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Supabase 프로젝트 설정",
+            "description": "Supabase 계정 생성 및 새 프로젝트 설정",
+            "status": "pending",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "DrizzleORM 설치 및 초기 설정",
+            "description": "DrizzleORM 및 관련 패키지 설치, 기본 설정 파일 생성",
+            "status": "pending",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "데이터베이스 스키마 정의",
+            "description": "User, Memo, Category 테이블 스키마를 DrizzleORM으로 정의",
+            "status": "pending",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "데이터베이스 클라이언트 설정",
+            "description": "Supabase와 DrizzleORM을 연결하는 클라이언트 설정",
+            "status": "pending",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "마이그레이션 실행 및 검증",
+            "description": "스키마를 Supabase 데이터베이스에 적용하고 검증",
+            "status": "pending",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Supabase Auth 인증 시스템 구현",
+        "description": "Supabase Auth를 활용한 사용자 인증 시스템을 구현하고 회원가입, 로그인, 로그아웃 기능을 개발합니다.",
+        "details": "1. Supabase Auth 설정:\n   - @supabase/supabase-js 설치\n   - Supabase 클라이언트 설정 (lib/supabase/client.ts)\n   - 환경 변수 설정 (.env.local)\n2. 인증 컴포넌트 구현:\n   - 로그인 폼 (components/auth/LoginForm.tsx)\n   - 회원가입 폼 (components/auth/SignUpForm.tsx)\n   - 로그아웃 버튼 (components/auth/LogoutButton.tsx)\n3. 인증 상태 관리:\n   - Supabase Auth 훅 구현 (hooks/useAuth.ts)\n   - 세션 상태 관리\n4. 보호된 라우트 설정:\n   - 미들웨어 구현 (middleware.ts)\n   - 서버 컴포넌트에서 사용자 확인\n5. 사용자 프로필 관리:\n   - 프로필 정보 조회/수정\n   - 아바타 업로드 (Supabase Storage)",
+        "testStrategy": "1. Supabase Auth 연결 테스트\n2. 회원가입/로그인/로그아웃 기능 테스트\n3. 보호된 라우트 접근 제어 테스트\n4. 세션 상태 관리 테스트\n5. 사용자 프로필 관리 테스트",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "기본 UI 컴포넌트 개발",
+        "description": "애플리케이션의 기본 UI 컴포넌트를 개발하고 반응형 디자인을 구현합니다.",
+        "details": "1. 공통 컴포넌트 개발:\n   - Button.tsx: 다양한 스타일의 버튼 컴포넌트\n   - Input.tsx: 텍스트 입력 컴포넌트\n   - Card.tsx: 메모 카드 컴포넌트\n   - Modal.tsx: 모달 다이얼로그 컴포넌트\n   - Dropdown.tsx: 드롭다운 메뉴 컴포넌트\n2. 레이아웃 컴포넌트:\n   - Navbar.tsx: 상단 네비게이션 바\n   - Sidebar.tsx: 사이드 메뉴 (카테고리 등)\n   - Layout.tsx: 전체 레이아웃 구조\n3. 반응형 디자인 구현 (Tailwind 브레이크포인트 활용)\n4. 다크 모드 지원 (Tailwind 다크 모드 클래스)\n5. 접근성 고려 (ARIA 속성, 키보드 네비게이션)",
+        "testStrategy": "1. 컴포넌트 렌더링 테스트\n2. 반응형 디자인 다양한 화면 크기 테스트\n3. 접근성 검사 도구 활용 (Lighthouse)\n4. 다크 모드 전환 테스트\n5. 크로스 브라우저 호환성 테스트",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "텍스트 메모 CRUD 기능 구현",
+        "description": "텍스트 메모의 생성, 조회, 수정, 삭제 기능을 구현합니다.",
+        "details": "1. 메모 API 엔드포인트 구현:\n   - 메모 생성: POST /api/memos\n   - 메모 목록 조회: GET /api/memos\n   - 메모 상세 조회: GET /api/memos/:id\n   - 메모 수정: PUT /api/memos/:id\n   - 메모 삭제: DELETE /api/memos/:id\n2. 메모 에디터 컴포넌트 개발:\n   - 텍스트 입력 영역\n   - 제목 및 내용 구분\n   - 자동 저장 기능\n3. 메모 목록 페이지 구현:\n   - 그리드/리스트 뷰 전환\n   - 정렬 옵션 (최신순, 제목순)\n   - 페이지네이션\n4. 메모 상세 페이지 구현:\n   - 메모 내용 표시\n   - 수정/삭제 기능\n   - 요약 정보 표시\n5. Zustand 상태 관리 설정",
+        "testStrategy": "1. API 엔드포인트 단위 테스트\n2. CRUD 작업 통합 테스트\n3. 에디터 기능 테스트\n4. 상태 관리 테스트\n5. 에러 처리 및 예외 상황 테스트",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Anthropic Claude API 연동 및 메모 요약 기능 구현",
+        "description": "Anthropic Claude API를 연동하여 메모 내용을 자동으로 요약하는 기능을 구현합니다.",
+        "details": "1. Anthropic Claude API 키 설정 및 환경 변수 구성\n2. Anthropic 클라이언트 설정 (lib/anthropic.ts):\n```typescript\nimport Anthropic from '@anthropic-ai/sdk';\n\nconst anthropic = new Anthropic({\n  apiKey: process.env.ANTHROPIC_API_KEY\n});\n\nexport default anthropic;\n```\n3. 요약 API 엔드포인트 구현: POST /api/memos/:id/summarize\n4. 요약 로직 구현:\n```typescript\nasync function summarizeMemo(content: string) {\n  try {\n    const response = await anthropic.messages.create({\n      model: \"claude-3-sonnet-20240229\",\n      max_tokens: 250,\n      messages: [\n        { role: \"user\", content: `다음 메모 내용을 3-5개의 핵심 포인트로 간결하게 요약해주세요:\n\n${content}` }\n      ]\n    });\n    return response.content[0].text;\n  } catch (error) {\n    console.error('요약 생성 오류:', error);\n    throw new Error('메모 요약을 생성할 수 없습니다.');\n  }\n}\n```\n5. 메모 저장/수정 시 자동 요약 트리거\n6. 요약 결과 표시 UI 구현\n7. 요약 캐싱 시스템 구현 (중복 API 호출 방지)",
+        "testStrategy": "1. Anthropic Claude API 연동 테스트\n2. 다양한 길이의 메모 요약 테스트\n3. 에러 처리 및 재시도 로직 테스트\n4. 캐싱 시스템 효율성 테스트\n5. API 비용 모니터링",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Anthropic Claude API 설정 및 클라이언트 구현",
+            "description": "Anthropic Claude API 키 설정, 환경 변수 구성 및 클라이언트 라이브러리를 설정합니다.",
+            "dependencies": [],
+            "details": "1. Anthropic API 키 발급 및 환경 변수 설정 (.env.local에 ANTHROPIC_API_KEY 추가)\n2. @anthropic-ai/sdk 패키지 설치: npm install @anthropic-ai/sdk\n3. lib/anthropic.ts 파일 생성 및 클라이언트 설정:\n```typescript\nimport Anthropic from '@anthropic-ai/sdk';\n\nconst anthropic = new Anthropic({\n  apiKey: process.env.ANTHROPIC_API_KEY\n});\n\nexport default anthropic;\n```\n4. API 연결 테스트 및 에러 처리 구현\n5. 타입 정의 및 인터페이스 설정",
+            "status": "pending",
+            "testStrategy": "1. API 키 유효성 검증 테스트\n2. Anthropic 클라이언트 초기화 테스트\n3. 기본 API 호출 연결 테스트\n4. 환경 변수 누락 시 에러 처리 테스트\n5. API 응답 형식 검증 테스트"
+          },
+          {
+            "id": 2,
+            "title": "메모 요약 API 엔드포인트 및 요약 로직 구현",
+            "description": "메모 내용을 Claude API로 요약하는 백엔드 로직과 API 엔드포인트를 구현합니다.",
+            "dependencies": [
+              "6.1"
+            ],
+            "details": "1. POST /api/memos/:id/summarize API 엔드포인트 구현\n2. 요약 로직 함수 구현:\n```typescript\nasync function summarizeMemo(content: string) {\n  try {\n    const response = await anthropic.messages.create({\n      model: \"claude-3-sonnet-20240229\",\n      max_tokens: 250,\n      messages: [\n        { role: \"user\", content: `다음 메모 내용을 3-5개의 핵심 포인트로 간결하게 요약해주세요:\\n\\n${content}` }\n      ]\n    });\n    return response.content[0].text;\n  } catch (error) {\n    console.error('요약 생성 오류:', error);\n    throw new Error('메모 요약을 생성할 수 없습니다.');\n  }\n}\n```\n3. 요청 검증 및 에러 처리 구현\n4. 응답 형식 표준화\n5. API 호출 제한 및 타임아웃 설정",
+            "status": "pending",
+            "testStrategy": "1. 다양한 길이의 메모 내용 요약 테스트\n2. API 엔드포인트 응답 시간 측정\n3. 잘못된 요청 처리 테스트\n4. Claude API 에러 상황 처리 테스트\n5. 요약 품질 및 일관성 검증"
+          },
+          {
+            "id": 3,
+            "title": "요약 트리거 및 UI 통합 구현",
+            "description": "메모 저장/수정 시 자동 요약 트리거와 요약 결과를 표시하는 UI를 구현합니다.",
+            "dependencies": [
+              "6.2"
+            ],
+            "details": "1. 메모 저장/수정 시 자동 요약 트리거 로직 구현\n2. 요약 버튼 및 수동 요약 기능 추가\n3. 요약 결과 표시 UI 컴포넌트 개발:\n   - 요약 내용 표시 영역\n   - 로딩 상태 표시\n   - 요약 실패 시 에러 메시지\n4. 메모 에디터에 요약 기능 통합\n5. 요약 상태 관리 (Zustand 스토어 업데이트)\n6. 요약 생성 중 UI 비활성화 처리",
+            "status": "pending",
+            "testStrategy": "1. 메모 저장 시 자동 요약 트리거 테스트\n2. 수동 요약 버튼 기능 테스트\n3. 요약 UI 컴포넌트 렌더링 테스트\n4. 로딩 및 에러 상태 표시 테스트\n5. 사용자 경험 및 반응성 테스트"
+          },
+          {
+            "id": 4,
+            "title": "요약 캐싱 및 성능 최적화 구현",
+            "description": "중복 API 호출을 방지하는 캐싱 시스템과 성능 최적화를 구현합니다.",
+            "dependencies": [
+              "6.3"
+            ],
+            "details": "1. 메모 내용 해시 기반 캐싱 시스템 구현\n2. 데이터베이스에 요약 결과 저장 (memos 테이블에 summary 컬럼 추가)\n3. 메모 내용 변경 감지 로직 구현\n4. 캐시 무효화 전략 설정\n5. API 호출 빈도 제한 (rate limiting) 구현\n6. 요약 생성 큐 시스템 (선택적)\n7. 성능 모니터링 및 로깅 추가\n8. API 비용 추적 및 알림 시스템",
+            "status": "pending",
+            "testStrategy": "1. 캐싱 시스템 효율성 테스트\n2. 메모 내용 변경 감지 정확도 테스트\n3. 중복 API 호출 방지 검증\n4. 캐시 무효화 로직 테스트\n5. API 비용 모니터링 기능 테스트\n6. 대용량 메모 처리 성능 테스트"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Web Speech API 연동 및 음성 메모 기능 구현",
+        "description": "Web Speech API를 활용하여 음성 인식 및 음성 메모 작성 기능을 구현합니다.",
+        "details": "1. Web Speech API 연동 (SpeechRecognition 인터페이스)\n2. 음성 인식 커스텀 훅 구현 (hooks/useSpeechRecognition.ts):\n```typescript\nimport { useState, useEffect, useCallback } from 'react';\n\nexport function useSpeechRecognition() {\n  const [transcript, setTranscript] = useState('');\n  const [isListening, setIsListening] = useState(false);\n  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);\n\n  useEffect(() => {\n    if (typeof window !== 'undefined') {\n      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;\n      if (SpeechRecognition) {\n        const recognition = new SpeechRecognition();\n        recognition.continuous = true;\n        recognition.interimResults = true;\n        recognition.lang = 'ko-KR';\n        \n        recognition.onresult = (event) => {\n          const current = event.resultIndex;\n          const transcript = event.results[current][0].transcript;\n          setTranscript((prev) => prev + transcript + ' ');\n        };\n        \n        setRecognition(recognition);\n      }\n    }\n    \n    return () => {\n      if (recognition) {\n        recognition.stop();\n      }\n    };\n  }, []);\n\n  const startListening = useCallback(() => {\n    if (recognition) {\n      setTranscript('');\n      recognition.start();\n      setIsListening(true);\n    }\n  }, [recognition]);\n\n  const stopListening = useCallback(() => {\n    if (recognition) {\n      recognition.stop();\n      setIsListening(false);\n    }\n  }, [recognition]);\n\n  return { transcript, isListening, startListening, stopListening };\n}\n```\n3. 음성 메모 UI 컴포넌트 개발:\n   - 녹음 시작/중지 버튼\n   - 음성 인식 상태 표시\n   - 실시간 텍스트 변환 표시\n4. 음성 인식 결과를 메모 에디터와 통합\n5. 브라우저 호환성 처리 (fallback 옵션)\n6. 음성 인식 정확도 개선 (노이즈 필터링, 문맥 인식)",
+        "testStrategy": "1. 다양한 브라우저에서 Web Speech API 호환성 테스트\n2. 다양한 음성 샘플로 인식 정확도 테스트\n3. 긴 음성 메모 처리 성능 테스트\n4. 오류 상황 처리 테스트 (마이크 접근 거부 등)\n5. 사용자 피드백 수집 및 개선",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Web Speech API 연동 및 음성 인식 커스텀 훅 구현",
+            "description": "Web Speech API를 연동하고 음성 인식 기능을 위한 커스텀 훅을 구현합니다.",
+            "dependencies": [],
+            "details": "1. Web Speech API 브라우저 지원 확인 및 초기화\n2. SpeechRecognition 인터페이스 설정 (continuous, interimResults, lang)\n3. useSpeechRecognition 커스텀 훅 구현\n4. 음성 인식 상태 관리 (transcript, isListening)\n5. 음성 인식 시작/중지 함수 구현\n6. 실시간 텍스트 변환 결과 처리\n7. 메모리 누수 방지를 위한 cleanup 로직 구현",
+            "status": "pending",
+            "testStrategy": "1. 다양한 브라우저에서 Web Speech API 지원 확인\n2. 음성 인식 정확도 테스트\n3. 커스텀 훅 상태 변화 테스트\n4. 메모리 누수 및 cleanup 테스트"
+          },
+          {
+            "id": 2,
+            "title": "음성 메모 녹음 및 변환 UI 컴포넌트 개발",
+            "description": "음성 녹음 시작/중지 버튼과 실시간 음성 변환 결과를 표시하는 UI 컴포넌트를 개발합니다.",
+            "dependencies": [
+              "7.1"
+            ],
+            "details": "1. VoiceMemo 컴포넌트 생성\n2. 녹음 시작/중지 토글 버튼 구현\n3. 마이크 아이콘 및 녹음 상태 시각적 표시\n4. 실시간 음성 변환 텍스트 표시 영역\n5. 음성 인식 진행 상태 표시 (파형 애니메이션)\n6. 음성 인식 결과 미리보기 및 편집 기능\n7. 접근성 고려 (키보드 단축키, 스크린 리더 지원)",
+            "status": "pending",
+            "testStrategy": "1. UI 컴포넌트 렌더링 테스트\n2. 사용자 인터랙션 테스트\n3. 실시간 텍스트 업데이트 테스트\n4. 접근성 테스트"
+          },
+          {
+            "id": 3,
+            "title": "음성 인식 결과와 메모 에디터 통합",
+            "description": "음성 인식으로 변환된 텍스트를 기존 메모 에디터와 통합하여 원활한 편집 경험을 제공합니다.",
+            "dependencies": [
+              "7.2"
+            ],
+            "details": "1. 메모 에디터와 음성 입력 모드 전환 기능\n2. 음성 변환 텍스트를 에디터에 삽입하는 로직\n3. 커서 위치 기반 텍스트 삽입 기능\n4. 음성 입력과 키보드 입력 동시 지원\n5. 음성 변환 텍스트 후처리 (문장 부호, 대소문자)\n6. 실행 취소/다시 실행 기능과의 통합\n7. 자동 저장 기능과의 연동",
+            "status": "pending",
+            "testStrategy": "1. 텍스트 삽입 위치 정확성 테스트\n2. 에디터 상태 동기화 테스트\n3. 실행 취소/다시 실행 기능 테스트\n4. 자동 저장 연동 테스트"
+          },
+          {
+            "id": 4,
+            "title": "브라우저 호환성 및 오류 처리 구현",
+            "description": "다양한 브라우저 환경에서의 호환성을 보장하고 음성 인식 관련 오류 상황을 적절히 처리합니다.",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "1. Web Speech API 미지원 브라우저 감지 및 fallback UI\n2. 마이크 접근 권한 요청 및 거부 처리\n3. 네트워크 연결 오류 처리\n4. 음성 인식 서비스 오류 처리\n5. 브라우저별 API 차이점 처리 (webkit prefix)\n6. 사용자 친화적 오류 메시지 표시\n7. 오류 상황에서의 graceful degradation\n8. 성능 최적화 (debouncing, throttling)",
+            "status": "pending",
+            "testStrategy": "1. 다양한 브라우저 호환성 테스트\n2. 오류 시나리오별 처리 테스트\n3. 권한 거부 상황 테스트\n4. 네트워크 오류 상황 테스트\n5. 성능 및 메모리 사용량 테스트"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "AI 기반 자동 카테고리 분류 기능 구현",
+        "description": "AI를 활용하여 메모 내용을 분석하고 자동으로 카테고리를 분류하는 기능을 구현합니다.",
+        "details": "1. 카테고리 관리 시스템 구현:\n   - 기본 카테고리 설정 (업무, 학습, 개인, 아이디어 등)\n   - 사용자 정의 카테고리 추가/수정/삭제\n2. Anthropic Claude API를 활용한 카테고리 분류 로직:\n```typescript\nasync function categorizeContent(content: string, categories: string[]) {\n  try {\n    const categoryList = categories.join(', ');\n    const response = await anthropic.messages.create({\n      model: \"claude-3-sonnet-20240229\",\n      max_tokens: 50,\n      messages: [\n        { \n          role: \"user\", \n          content: `다음 메모 내용을 분석하여 가장 적합한 카테고리를 선택하세요. 가능한 카테고리: ${categoryList}\n\n메모 내용: ${content}` \n        }\n      ]\n    });\n    return response.content[0].text;\n  } catch (error) {\n    console.error('카테고리 분류 오류:', error);\n    return null;\n  }\n}\n```\n3. 메모 저장 시 자동 카테고리 분류 트리거\n4. 카테고리별 메모 필터링 UI 구현\n5. 카테고리 관리 페이지 개발\n6. 카테고리 색상 커스터마이징 기능",
+        "testStrategy": "1. 다양한 메모 내용으로 분류 정확도 테스트\n2. 카테고리 CRUD 기능 테스트\n3. 사용자 정의 카테고리 처리 테스트\n4. 분류 결과 일관성 테스트\n5. 에러 처리 및 기본값 설정 테스트",
+        "priority": "medium",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "메모 검색 및 필터링 기능 구현",
+        "description": "키워드, 카테고리, 날짜 등 다양한 조건으로 메모를 검색하고 필터링하는 기능을 구현합니다.",
+        "details": "1. 검색 API 엔드포인트 구현:\n   - GET /api/memos/search?q=keyword&category=id&from=date&to=date\n2. 데이터베이스 검색 쿼리 최적화:\n```typescript\nasync function searchMemos(userId: string, params: SearchParams) {\n  const { q, category, from, to, page = 1, limit = 10 } = params;\n  \n  const where: any = { userId };\n  \n  if (q) {\n    where.OR = [\n      { title: { contains: q, mode: 'insensitive' } },\n      { content: { contains: q, mode: 'insensitive' } },\n      { summary: { contains: q, mode: 'insensitive' } }\n    ];\n  }\n  \n  if (category) {\n    where.categoryId = category;\n  }\n  \n  if (from || to) {\n    where.createdAt = {};\n    if (from) where.createdAt.gte = new Date(from);\n    if (to) where.createdAt.lte = new Date(to);\n  }\n  \n  const skip = (page - 1) * limit;\n  \n  const [memos, total] = await Promise.all([\n    prisma.memo.findMany({\n      where,\n      include: { category: true },\n      orderBy: { createdAt: 'desc' },\n      skip,\n      take: limit\n    }),\n    prisma.memo.count({ where })\n  ]);\n  \n  return { memos, total, page, limit };\n}\n```\n3. 검색 UI 컴포넌트 개발:\n   - 검색창 및 자동완성\n   - 필터 옵션 (카테고리, 날짜 범위)\n   - 정렬 옵션 (최신순, 관련성순)\n4. 검색 결과 페이지 구현\n5. 검색 히스토리 저장 기능\n6. 실시간 검색 결과 업데이트 (debounce 적용)",
+        "testStrategy": "1. 다양한 검색 조건 조합 테스트\n2. 검색 성능 및 응답 시간 테스트\n3. 대량 데이터에서의 검색 효율성 테스트\n4. 페이지네이션 정확성 테스트\n5. 검색 결과 정렬 테스트",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "메모 데이터 동기화 및 백업 시스템 구현",
+        "description": "사용자 메모 데이터의 안전한 동기화 및 백업 시스템을 구현합니다.",
+        "details": "1. 실시간 데이터 동기화 구현:\n   - SWR 또는 React Query 활용\n   - 낙관적 UI 업데이트\n   - 충돌 해결 전략\n2. 자동 저장 기능 구현:\n   - 에디터 변경 감지 (debounce 적용)\n   - 백그라운드 저장 프로세스\n   - 저장 상태 표시\n3. 데이터 백업 시스템:\n   - 주기적 백업 스케줄링\n   - 백업 데이터 암호화\n   - 복원 메커니즘\n4. 오프라인 지원 기능:\n   - 로컬 스토리지 임시 저장\n   - 온라인 복귀 시 동기화\n   - 충돌 해결 UI",
+        "testStrategy": "1. 다중 기기 동기화 테스트\n2. 네트워크 단절 상황 테스트\n3. 대용량 데이터 백업/복원 테스트\n4. 동시 편집 충돌 해결 테스트\n5. 데이터 무결성 검증",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "실시간 데이터 동기화 및 낙관적 UI 업데이트 구현",
+            "description": "SWR 또는 React Query를 활용하여 실시간 데이터 동기화 시스템을 구축하고 낙관적 UI 업데이트를 구현합니다.",
+            "dependencies": [],
+            "details": "- SWR 또는 React Query 라이브러리 설치 및 설정\n- 메모 데이터 실시간 동기화를 위한 커스텀 훅 개발\n- 낙관적 UI 업데이트 로직 구현 (사용자 액션 즉시 반영)\n- 서버 응답 대기 중 상태 표시 UI 구현\n- 동시 편집 충돌 감지 및 해결 전략 구현\n- 네트워크 상태 모니터링 및 재시도 로직 구현",
+            "status": "pending",
+            "testStrategy": "- 다중 기기 동기화 테스트 시나리오 작성 및 실행\n- 네트워크 지연 및 오류 상황에서의 동작 테스트\n- 동시 편집 충돌 시나리오 테스트\n- 낙관적 업데이트 롤백 테스트"
+          },
+          {
+            "id": 2,
+            "title": "자동 저장 및 충돌 해결 시스템 개발",
+            "description": "에디터 변경을 감지하여 자동 저장하는 기능과 동시 편집 시 발생할 수 있는 충돌을 해결하는 시스템을 개발합니다.",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "- 에디터 변경 감지 로직 구현 (debounce 적용)\n- 백그라운드 저장 프로세스 개발\n- 저장 상태 표시 UI 컴포넌트 구현 (저장 중, 저장됨, 오류)\n- 충돌 감지 알고리즘 구현\n- 충돌 해결을 위한 사용자 인터페이스 개발\n- 버전 히스토리 관리 시스템 구현",
+            "status": "pending",
+            "testStrategy": "- 다양한 입력 패턴에서의 자동 저장 테스트\n- 네트워크 불안정 상황에서의 저장 신뢰성 테스트\n- 충돌 해결 UI 사용성 테스트\n- 대용량 데이터 저장 성능 테스트"
+          },
+          {
+            "id": 3,
+            "title": "데이터 백업 및 복원 기능 구현",
+            "description": "사용자 메모 데이터의 주기적 백업 시스템과 필요 시 데이터를 복원할 수 있는 메커니즘을 구현합니다.",
+            "dependencies": [
+              "10.1",
+              "10.2"
+            ],
+            "details": "- 주기적 백업 스케줄링 시스템 구현\n- 백업 데이터 암호화 로직 개발\n- 백업 저장소 연동 (Supabase 또는 외부 스토리지)\n- 백업 버전 관리 및 메타데이터 저장\n- 사용자 요청 시 수동 백업 기능 구현\n- 백업 데이터 복원 프로세스 및 UI 개발\n- 복원 진행 상태 표시 기능 구현",
+            "status": "pending",
+            "testStrategy": "- 대용량 데이터 백업 및 복원 성능 테스트\n- 암호화된 백업 데이터 무결성 검증\n- 다양한 백업 버전에서의 복원 테스트\n- 백업 스케줄링 정확성 테스트\n- 복원 후 데이터 일관성 검증"
+          },
+          {
+            "id": 4,
+            "title": "오프라인 지원 및 로컬 스토리지 통합",
+            "description": "네트워크 연결이 없는 상황에서도 메모 작성 및 편집이 가능하도록 오프라인 지원 기능을 구현합니다.",
+            "dependencies": [
+              "10.1",
+              "10.2",
+              "10.3"
+            ],
+            "details": "- 네트워크 상태 감지 시스템 구현\n- 로컬 스토리지를 활용한 임시 데이터 저장 로직 개발\n- IndexedDB 또는 localStorage 설정\n- 오프라인 상태 표시 UI 구현\n- 온라인 복귀 시 자동 동기화 메커니즘 개발\n- 오프라인 작업과 서버 데이터 간 충돌 해결 UI 구현\n- 오프라인 작업 기록 관리 시스템 개발",
+            "status": "pending",
+            "testStrategy": "- 다양한 네트워크 상태 변화 시나리오 테스트\n- 오프라인 상태에서의 데이터 저장 신뢰성 테스트\n- 대용량 오프라인 데이터 동기화 성능 테스트\n- 충돌 해결 UI 사용성 테스트\n- 다중 기기 간 오프라인 작업 동기화 테스트"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "사용자 대시보드 및 통계 기능 구현",
+        "description": "사용자의 메모 작성 패턴과 카테고리별 통계를 시각화하는 대시보드를 구현합니다.",
+        "details": "1. 통계 데이터 API 엔드포인트 구현:\n   - GET /api/stats/memos\n   - GET /api/stats/categories\n2. 통계 계산 로직 구현:\n   - 기간별 메모 작성 수\n   - 카테고리별 분포\n   - 평균 메모 길이\n   - 활동 시간대\n3. 데이터 시각화 컴포넌트 개발:\n   - Chart.js 또는 Recharts 라이브러리 활용\n   - 막대 그래프, 파이 차트, 라인 차트 등\n4. 대시보드 페이지 레이아웃 구현\n5. 필터 및 기간 선택 옵션\n6. 인사이트 추천 기능 (AI 기반)",
+        "testStrategy": "1. 통계 계산 정확성 테스트\n2. 차트 렌더링 성능 테스트\n3. 다양한 데이터 세트에서의 시각화 테스트\n4. 필터 및 기간 선택 기능 테스트\n5. 반응형 레이아웃 테스트",
+        "priority": "low",
+        "dependencies": [
+          5,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "성능 최적화 및 코드 리팩토링",
+        "description": "애플리케이션의 성능을 최적화하고 코드 품질을 개선합니다.",
+        "details": "1. 프론트엔드 성능 최적화:\n   - 코드 스플리팅 및 지연 로딩\n   - 이미지 최적화\n   - 메모이제이션 (React.memo, useMemo, useCallback)\n   - 번들 크기 분석 및 최적화\n2. 백엔드 성능 최적화:\n   - 데이터베이스 쿼리 최적화\n   - 인덱스 추가 및 조정\n   - 캐싱 전략 구현 (Redis 활용)\n   - API 응답 압축\n3. 코드 리팩토링:\n   - 중복 코드 제거\n   - 컴포넌트 구조 개선\n   - 타입 정의 강화\n   - 에러 처리 일관성 확보\n4. 성능 모니터링 시스템 구축:\n   - 클라이언트 성능 메트릭 수집\n   - 서버 응답 시간 모니터링\n   - 에러 로깅 및 알림",
+        "testStrategy": "1. Lighthouse 성능 점수 측정\n2. 로딩 시간 및 TTI(Time to Interactive) 측정\n3. 메모리 사용량 모니터링\n4. API 응답 시간 벤치마크\n5. 대규모 데이터셋에서의 성능 테스트",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "PWA 지원 및 모바일 최적화",
+        "description": "Progressive Web App(PWA) 기능을 구현하고 모바일 환경에 최적화합니다.",
+        "details": "1. PWA 설정:\n   - 서비스 워커 구현\n   - 매니페스트 파일 설정\n   - 오프라인 지원\n   - 설치 가능 구성\n2. 모바일 UI 최적화:\n   - 터치 친화적 인터페이스\n   - 모바일 제스처 지원\n   - 화면 방향 대응\n   - 가상 키보드 대응\n3. 푸시 알림 구현:\n   - 웹 푸시 API 연동\n   - 알림 권한 관리\n   - 알림 설정 UI\n4. 성능 최적화:\n   - 모바일 네트워크 대응\n   - 배터리 효율성 고려\n   - 데이터 사용량 최적화",
+        "testStrategy": "1. 다양한 모바일 기기 및 브라우저 테스트\n2. 오프라인 기능 테스트\n3. PWA 설치 및 업데이트 테스트\n4. 푸시 알림 전송 및 수신 테스트\n5. 모바일 네트워크 환경 시뮬레이션 테스트",
+        "priority": "low",
+        "dependencies": [
+          12
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "접근성 및 국제화 지원",
+        "description": "웹 접근성 표준을 준수하고 다국어 지원을 구현합니다.",
+        "details": "1. 웹 접근성 개선:\n   - ARIA 속성 적용\n   - 키보드 네비게이션 지원\n   - 스크린 리더 호환성\n   - 색상 대비 최적화\n   - 접근성 테스트 및 수정\n2. 국제화(i18n) 구현:\n   - next-intl 라이브러리 설정\n   - 번역 파일 구성 (한국어, 영어 등)\n   - 날짜/시간 형식 현지화\n   - RTL(Right-to-Left) 지원\n3. 사용자 설정:\n   - 언어 선택 UI\n   - 접근성 모드 설정\n   - 폰트 크기 조절\n4. 문화적 고려사항:\n   - 아이콘 및 이미지의 문화적 중립성\n   - 지역별 콘텐츠 조정",
+        "testStrategy": "1. WCAG 2.1 가이드라인 준수 검증\n2. 스크린 리더 호환성 테스트\n3. 키보드 전용 사용성 테스트\n4. 다양한 언어 설정에서의 UI 테스트\n5. 자동화된 접근성 검사 도구 활용",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          12
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "배포 파이프라인 및 모니터링 시스템 구축",
+        "description": "CI/CD 파이프라인을 구축하고 애플리케이션 모니터링 시스템을 설정합니다.",
+        "details": "1. CI/CD 파이프라인 구축:\n   - GitHub Actions 워크플로우 설정\n   - 자동화된 테스트 실행\n   - 빌드 및 배포 자동화\n   - 환경별 배포 전략 (개발, 스테이징, 프로덕션)\n2. 인프라 설정:\n   - Vercel 풀스택 애플리케이션 배포\n   - Supabase 데이터베이스 및 인증\n   - 환경 변수 관리\n3. 모니터링 시스템 구축:\n   - 에러 추적 (Sentry)\n   - 성능 모니터링 (Vercel Analytics)\n   - 로그 관리 (Vercel Logs)\n   - 상태 페이지 설정\n4. 알림 시스템:\n   - 중요 오류 알림\n   - 성능 저하 알림\n   - 사용량 임계값 알림",
+        "testStrategy": "1. CI/CD 파이프라인 검증\n2. 다양한 환경에서의 배포 테스트\n3. 롤백 프로세스 테스트\n4. 모니터링 시스템 정확성 검증\n5. 알림 시스템 효율성 테스트",
+        "priority": "medium",
+        "dependencies": [
+          12
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-28T04:59:33.322Z",
+      "updated": "2025-07-28T05:24:36.391Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
